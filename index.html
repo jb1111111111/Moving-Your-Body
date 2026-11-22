@@ -41,6 +41,15 @@ footer{text-align:center;color:#8290a5;font-size:.75rem;margin-top:auto;padding-
   .symbol.pair[aria-label$="Foot"]{font-size:clamp(3.2rem,15vw,7rem)}
 }
 
+
+/* Fötterna har samma stora storlek oavsett om en eller flera symboler visas. */
+.symbol[aria-label$="Foot"],
+.symbol.pair[aria-label$="Foot"]{font-size:clamp(4.5rem,17.5vw,11rem)}
+@media(max-width:720px){
+  .symbol[aria-label$="Foot"],
+  .symbol.pair[aria-label$="Foot"]{font-size:clamp(4.5rem,23vw,9rem)}
+}
+
 </style>
 </head>
 <body>
