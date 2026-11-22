@@ -23,7 +23,7 @@ select{width:100%;background:#101827;color:white;border:1px solid #ffffff30;bord
 .tile{border:0;border-radius:clamp(14px,2.5vw,26px);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;min-width:0;min-height:0;box-shadow:inset 0 -8px 0 #00000012,0 8px 24px #0003;transition:filter .12s,transform .12s}
 .tile.yellow{background:var(--yellow);color:#392900}.tile.red{background:var(--red);color:#3d0808}.tile.blue{background:var(--blue);color:#fff}.tile.green{background:var(--green);color:#052e16}
 .tile:not(.lit){filter:saturate(.82) brightness(.74)}.tile.lit{filter:saturate(1.12) brightness(1.13);transform:scale(.985);outline:5px solid #fff;outline-offset:-8px;box-shadow:0 0 0 5px #fff6,0 0 35px #fff7,inset 0 -8px 0 #00000012}
-.symbols{display:flex;align-items:center;justify-content:center;gap:clamp(2px,1vw,12px);width:100%;height:100%;padding:5%}.symbol{font-family:"Apple Color Emoji","Segoe UI Emoji",sans-serif;font-size:clamp(3.5rem,14vw,9.5rem);line-height:1;filter:drop-shadow(0 5px 2px #0002);user-select:none}.symbol.pair{font-size:clamp(2.8rem,9vw,6.4rem)}
+.symbols{display:flex;align-items:center;justify-content:center;gap:clamp(2px,1vw,12px);width:100%;height:100%;padding:5%}.symbol{font-family:"Apple Color Emoji","Segoe UI Emoji",sans-serif;font-size:clamp(3.5rem,14vw,9.5rem);line-height:1;filter:drop-shadow(0 5px 2px #0002);user-select:none}.symbol.pair{font-size:clamp(2.8rem,9vw,6.4rem)}.symbol.mirror{transform:scaleX(-1)}
 .tile-name{position:absolute;bottom:9px;left:12px;font-size:clamp(.55rem,1.5vw,.85rem);font-weight:1000;letter-spacing:.13em;opacity:.72}
 .hint{text-align:center;color:var(--muted);font-size:.85rem;margin:0}
 .finished{display:none;text-align:center}.finished.show{display:block}.finished h2{font-size:2rem;margin:0 0 6px}.finished p{color:var(--muted);margin:0 0 16px}
@@ -81,7 +81,7 @@ footer{text-align:center;color:#8290a5;font-size:.75rem;margin-top:auto;padding-
  function showNext(){
    const n=countForStep(),chosen=shuffle([...availableLimbs()]).slice(0,n),colors=shuffle(['yellow','red','blue','green']).slice(0,n);
    tiles.forEach(t=>{t.classList.remove('lit');t.querySelector('.symbols').innerHTML=''});
-   chosen.forEach((limb,i)=>{const tile=tiles.find(t=>t.dataset.color===colors[i]);const span=document.createElement('span');span.className='symbol'+(n>1?' pair':'');span.textContent=icons[limb];span.setAttribute('aria-label',limb);tile.querySelector('.symbols').appendChild(span);tile.classList.add('lit')});
+   chosen.forEach((limb,i)=>{const tile=tiles.find(t=>t.dataset.color===colors[i]);const span=document.createElement('span');span.className='symbol'+(n>1?' pair':'')+(limb.startsWith('left')?' mirror':'');span.textContent=icons[limb];span.setAttribute('aria-label',limb);tile.querySelector('.symbols').appendChild(span);tile.classList.add('lit')});
    moves++;$('movesStat').textContent=moves;stepDelay=nextDelay();$('speedStat').textContent=stepDelay>2100?'Lugn':stepDelay>1300?'Medel':'Snabbt';
    if(moves===1||moves%3===0)beep(480+Math.min(400,moves*8),.07);
    lastStep=Date.now();timer=setTimeout(showNext,stepDelay);
