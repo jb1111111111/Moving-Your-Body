@@ -82,7 +82,7 @@ footer{text-align:center;color:#8290a5;font-size:.75rem;margin-top:auto;padding-
  function availableLimbs(){if(difficulty==='easy')return ['leftFoot','rightFoot'];if(difficulty==='medium')return moves<5?['leftFoot','rightFoot']:limbs;return limbs}
  function nextDelay(){const base=difficulty==='easy'?2600:difficulty==='medium'?2050:1550;const ramp=difficulty==='easy'?Math.min(700,moves*28):difficulty==='medium'?Math.min(800,moves*32):Math.min(650,moves*24);return Math.max(difficulty==='easy'?1500:difficulty==='medium'?900:600,base-ramp)}
  function showNext(){
-   const n=countForStep(),chosen=shuffle([...availableLimbs()]).slice(0,n),colors=shuffle(['yellow','red','blue','green']).slice(0,n);
+   const n=countForStep(),pool=availableLimbs(),feet=pool.filter(limb=>limb.endsWith('Foot')),hands=pool.filter(limb=>limb.endsWith('Hand'));const chosen=[shuffle(feet)[0],...shuffle([...feet.filter(limb=>limb!==feet[0]),...hands]).slice(0,n-1)],colors=shuffle(['yellow','red','blue','green']).slice(0,n);
    tiles.forEach(t=>{t.classList.remove('lit');t.querySelector('.symbols').innerHTML=''});
    chosen.forEach((limb,i)=>{const tile=tiles.find(t=>t.dataset.color===colors[i]);const span=document.createElement('span');span.className='symbol'+(n>1?' pair':'')+(limb.startsWith('left')?' mirror':'');span.textContent=icons[limb];span.setAttribute('aria-label',limb);tile.querySelector('.symbols').appendChild(span);tile.classList.add('lit')});
    moves++;$('movesStat').textContent=moves;stepDelay=nextDelay();$('speedStat').textContent=stepDelay>2100?'Lugn':stepDelay>1300?'Medel':'Snabbt';
