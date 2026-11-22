@@ -14,7 +14,8 @@ header{text-align:center}h1{font-size:clamp(2rem,5vw,3.7rem);margin:4px 0 0;lett
 .setup{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:end}
 .field label{display:block;font-size:.8rem;color:var(--muted);font-weight:700;margin:0 0 7px 3px}
 select{width:100%;background:#101827;color:white;border:1px solid #ffffff30;border-radius:12px;padding:12px;min-height:48px}
-.soundrow{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.9rem;margin-top:15px}.soundrow input{width:20px;height:20px;accent-color:#22c55e}
+.soundrow{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.9rem;margin-top:15px}
+.combo-guide{margin-top:16px;padding:14px 16px;background:#ffffff0a;border:1px solid #ffffff18;border-radius:14px}.combo-guide h2{font-size:1rem;margin:0 0 10px}.combo-levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.combo-level{padding:10px;background:#10182788;border-radius:10px;min-width:0}.combo-level strong{display:block;margin-bottom:5px}.combo-level p{margin:0;color:var(--muted);font-size:.82rem;line-height:1.45}@media(max-width:600px){.combo-levels{grid-template-columns:1fr}.combo-level{padding:9px 11px}}.soundrow input{width:20px;height:20px;accent-color:#22c55e}
 .start{border:0;border-radius:14px;padding:13px 22px;min-height:50px;background:#22c55e;color:#062511;font-weight:900;font-size:1.05rem;box-shadow:0 5px 0 #13813d;transition:transform .1s}.start:active{transform:translateY(3px);box-shadow:0 2px 0 #13813d}
 .game{display:none;gap:14px}.game.active{display:flex;flex-direction:column}
 .stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}.stat{background:#ffffff0c;border-radius:14px;padding:10px 14px;text-align:center}.stat strong{display:block;font-size:clamp(1.25rem,3vw,2rem);font-variant-numeric:tabular-nums}.stat span{color:var(--muted);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
@@ -43,6 +44,7 @@ footer{text-align:center;color:#8290a5;font-size:.75rem;margin-top:auto;padding-
     <div class="field" id="amountField"><label for="amount" id="amountLabel">TID</label><select id="amount"><option value="30">30 sekunder</option><option value="60" selected>1 minut</option><option value="120">2 minuter</option></select></div>
     <button class="start" id="startBtn">STARTA SPELET</button>
   </div>
+  <div class="combo-guide"><h2>Möjliga kombinationer per nivå</h2><div class="combo-levels"><div class="combo-level"><strong>Easy</strong><p>🦶 Vänster fot<br>🦶 Höger fot<br>🦶🦶 Båda fötterna</p></div><div class="combo-level"><strong>Medium</strong><p>1–3 kroppsdelar. Minst en fot, plus den andra foten och/eller en eller två händer.</p></div><div class="combo-level"><strong>Hard</strong><p>1–4 kroppsdelar. Alla kombinationer av vänster/höger hand och fot, alltid minst en fot.</p></div></div></div>
   <label class="soundrow"><input type="checkbox" id="sound" checked> Ljudeffekter (inga talade instruktioner)</label>
 </section>
 <section class="game" id="gamePanel">
