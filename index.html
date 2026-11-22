@@ -32,6 +32,15 @@ select{width:100%;background:#101827;color:white;border:1px solid #ffffff30;bord
 footer{text-align:center;color:#8290a5;font-size:.75rem;margin-top:auto;padding-top:8px}
 @media(max-width:720px){.setup{grid-template-columns:repeat(2,minmax(0,1fr))}.board{aspect-ratio:1/1}.symbol{font-size:clamp(3.8rem,19vw,8rem)}.symbol.pair{font-size:clamp(2.5rem,12vw,5.5rem)}}
 @media(max-width:390px){.app{padding:10px}.panel{padding:12px}.stats{gap:6px}.stat{padding:8px 4px}.tile-name{bottom:6px;left:8px}}
+
+/* Fötter ska alltid visas större än händer. */
+.symbol[aria-label$="Foot"]{font-size:clamp(4.5rem,17.5vw,11rem)}
+.symbol.pair[aria-label$="Foot"]{font-size:clamp(3.5rem,11.25vw,8rem)}
+@media(max-width:720px){
+  .symbol[aria-label$="Foot"]{font-size:clamp(4.5rem,23vw,9rem)}
+  .symbol.pair[aria-label$="Foot"]{font-size:clamp(3.2rem,15vw,7rem)}
+}
+
 </style>
 </head>
 <body>
