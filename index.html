@@ -50,6 +50,15 @@ footer{text-align:center;color:#8290a5;font-size:.75rem;margin-top:auto;padding-
   .symbol.pair[aria-label$="Foot"]{font-size:clamp(4.5rem,23vw,9rem)}
 }
 
+
+/* Färgkodning för sida: vänster = blå, höger = orange. */
+.symbol[aria-label^="left"],
+.symbol[aria-label^="right"]{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:.08em}
+.symbol[aria-label^="left"]::after,
+.symbol[aria-label^="right"]::after{font-family:system-ui,sans-serif;font-size:.19em;font-weight:1000;line-height:1;padding:.28em .65em;border-radius:999px;letter-spacing:.06em;filter:none}
+.symbol[aria-label^="left"]::after{content:"VÄNSTER";background:#1d4ed8;color:#fff}
+.symbol[aria-label^="right"]::after{content:"HÖGER";background:#f97316;color:#1b1208}
+
 </style>
 </head>
 <body>
