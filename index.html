@@ -59,6 +59,9 @@ footer{text-align:center;color:#8290a5;font-size:.75rem;margin-top:auto;padding-
 .symbol[aria-label^="left"]::after{content:"VÄNSTER";background:#1d4ed8;color:#fff}
 .symbol[aria-label^="right"]::after{content:"HÖGER";background:#f97316;color:#1b1208}
 
+
+/* Behåll vänstermärkningen läsbar trots spegelvänd fotsymbol. */
+.symbol.mirror::after{transform:scaleX(-1)}
 </style>
 </head>
 <body>
