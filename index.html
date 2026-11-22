@@ -62,6 +62,16 @@ footer{text-align:center;color:#8290a5;font-size:.75rem;margin-top:auto;padding-
 
 /* Behåll vänstermärkningen läsbar trots spegelvänd fotsymbol. */
 .symbol.mirror::after{transform:scaleX(-1)}
+
+/* Händer och fötter ska vara lika stora, oavsett antal symboler. */
+.symbol,
+.symbol.pair{font-size:clamp(4.5rem,17.5vw,11rem)}
+.symbol[aria-label^="left"]::after,
+.symbol[aria-label^="right"]::after{font-size:.24em;padding:.32em .72em}
+@media(max-width:720px){
+  .symbol,
+  .symbol.pair{font-size:clamp(4.5rem,23vw,9rem)}
+}
 </style>
 </head>
 <body>
