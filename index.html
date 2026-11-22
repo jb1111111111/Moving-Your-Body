@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101827">
+<title>Moving Your Body</title>
+<style>
+:root{color-scheme:dark;--bg:#101827;--panel:#1b2739;--muted:#aab7c9;--white:#f8fafc;--yellow:#facc15;--red:#ef4444;--blue:#3b82f6;--green:#22c55e}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#263852,var(--bg) 55%);color:var(--white);font-family:system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+button,select{font:inherit}button{cursor:pointer}.app{max-width:1100px;margin:auto;padding:clamp(14px,3vw,30px);min-height:100vh;display:flex;flex-direction:column;gap:18px}
+header{text-align:center}h1{font-size:clamp(2rem,5vw,3.7rem);margin:4px 0 0;letter-spacing:-.05em;font-weight:900}header p{margin:4px 0;color:var(--muted);font-size:clamp(.9rem,2vw,1.1rem)}
+.panel{background:#1b2739eF;border:1px solid #ffffff18;border-radius:22px;padding:clamp(14px,2.5vw,24px);box-shadow:0 18px 50px #0003}
+.setup{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:end}
+.field label{display:block;font-size:.8rem;color:var(--muted);font-weight:700;margin:0 0 7px 3px}
+select{width:100%;background:#101827;color:white;border:1px solid #ffffff30;border-radius:12px;padding:12px;min-height:48px}
+.soundrow{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.9rem;margin-top:15px}.soundrow input{width:20px;height:20px;accent-color:#22c55e}
+.start{border:0;border-radius:14px;padding:13px 22px;min-height:50px;background:#22c55e;color:#062511;font-weight:900;font-size:1.05rem;box-shadow:0 5px 0 #13813d;transition:transform .1s}.start:active{transform:translateY(3px);box-shadow:0 2px 0 #13813d}
+.game{display:none;gap:14px}.game.active{display:flex;flex-direction:column}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}.stat{background:#ffffff0c;border-radius:14px;padding:10px 14px;text-align:center}.stat strong{display:block;font-size:clamp(1.25rem,3vw,2rem);font-variant-numeric:tabular-nums}.stat span{color:var(--muted);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.progress-wrap{display:flex;align-items:center;gap:12px}.progress-track{height:13px;background:#ffffff18;border-radius:99px;overflow:hidden;flex:1}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#22c55e,#a3e635);border-radius:99px;transition:width .25s}.progress-label{font-weight:800;min-width:48px;text-align:right;font-variant-numeric:tabular-nums}
+.board{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(8px,1.6vw,16px);width:100%;max-width:900px;margin:0 auto;aspect-ratio:1.75/1}
+.tile{border:0;border-radius:clamp(14px,2.5vw,26px);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;min-width:0;min-height:0;box-shadow:inset 0 -8px 0 #00000012,0 8px 24px #0003;transition:filter .12s,transform .12s}
+.tile.yellow{background:var(--yellow);color:#392900}.tile.red{background:var(--red);color:#3d0808}.tile.blue{background:var(--blue);color:#fff}.tile.green{background:var(--green);color:#052e16}
+.tile:not(.lit){filter:saturate(.82) brightness(.74)}.tile.lit{filter:saturate(1.12) brightness(1.13);transform:scale(.985);outline:5px solid #fff;outline-offset:-8px;box-shadow:0 0 0 5px #fff6,0 0 35px #fff7,inset 0 -8px 0 #00000012}
+.symbols{display:flex;align-items:center;justify-content:center;gap:clamp(2px,1vw,12px);width:100%;height:100%;padding:5%}.symbol{font-family:"Apple Color Emoji","Segoe UI Emoji",sans-serif;font-size:clamp(3.5rem,14vw,9.5rem);line-height:1;filter:drop-shadow(0 5px 2px #0002);user-select:none}.symbol.pair{font-size:clamp(2.8rem,9vw,6.4rem)}
+.tile-name{position:absolute;bottom:9px;left:12px;font-size:clamp(.55rem,1.5vw,.85rem);font-weight:1000;letter-spacing:.13em;opacity:.72}
+.hint{text-align:center;color:var(--muted);font-size:.85rem;margin:0}
+.finished{display:none;text-align:center}.finished.show{display:block}.finished h2{font-size:2rem;margin:0 0 6px}.finished p{color:var(--muted);margin:0 0 16px}
+footer{text-align:center;color:#8290a5;font-size:.75rem;margin-top:auto;padding-top:8px}
+@media(max-width:720px){.setup{grid-template-columns:repeat(2,minmax(0,1fr))}.board{aspect-ratio:1.12/1;max-height:62vh}.symbol{font-size:clamp(3.8rem,19vw,8rem)}.symbol.pair{font-size:clamp(2.5rem,12vw,5.5rem)}}
+@media(max-width:390px){.app{padding:10px}.panel{padding:12px}.stats{gap:6px}.stat{padding:8px 4px}.tile-name{bottom:6px;left:8px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><h1>Moving Your Body</h1><p>Fyra färger. Händer och fötter. Rör på dig!</p></header>
+<section class="panel" id="setupPanel">
+  <div class="setup">
+    <div class="field"><label for="difficulty">SVÅRIGHET</label><select id="difficulty"><option value="easy">Easy</option><option value="medium">Medium</option><option value="hard">Hard</option></select></div>
+    <div class="field"><label for="mode">SPELSÄTT</label><select id="mode"><option value="time">Tid</option><option value="set">Set</option><option value="unlimited">Unlimited</option></select></div>
+    <div class="field" id="amountField"><label for="amount" id="amountLabel">TID</label><select id="amount"><option value="30">30 sekunder</option><option value="60" selected>1 minut</option><option value="120">2 minuter</option></select></div>
+    <button class="start" id="startBtn">STARTA SPELET</button>
+  </div>
+  <label class="soundrow"><input type="checkbox" id="sound" checked> Ljudeffekter (inga talade instruktioner)</label>
+</section>
+<section class="game" id="gamePanel">
+  <div class="panel">
+    <div class="stats">
+      <div class="stat"><strong id="mainStat">00:00</strong><span id="mainLabel">Tid kvar</span></div>
+      <div class="stat"><strong id="movesStat">0</strong><span>Visade kombinationer</span></div>
+      <div class="stat"><strong id="speedStat">Lugn</strong><span>Tempo</span></div>
+    </div>
+    <div class="progress-wrap" style="margin-top:14px"><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><div class="progress-label" id="progressLabel">0%</div></div>
+  </div>
+  <div class="board" aria-label="Spelplan med fyra färgade rutor">
+    <div class="tile yellow" data-color="yellow"><div class="symbols"></div><span class="tile-name">GUL</span></div>
+    <div class="tile red" data-color="red"><div class="symbols"></div><span class="tile-name">RÖD</span></div>
+    <div class="tile blue" data-color="blue"><div class="symbols"></div><span class="tile-name">BLÅ</span></div>
+    <div class="tile green" data-color="green"><div class="symbols"></div><span class="tile-name">GRÖN</span></div>
+  </div>
+  <p class="hint" id="gameHint">Följ symbolerna på de lysande rutorna.</p>
+</section>
+<section class="panel finished" id="finishedPanel"><h2 id="finishTitle">Snyggt jobbat!</h2><p id="finishText"></p><button class="start" id="againBtn">SPELA IGEN</button></section>
+<footer>Moving Your Body · Följ symbolerna på skärmen. Spelet registrerar inte rörelser.</footer>
+</div>
+<script>
+(function(){
+ const $=id=>document.getElementById(id);
+ const tiles=[...document.querySelectorAll('.tile')];
+ const limbs=['leftFoot','rightFoot','leftHand','rightHand'];
+ const icons={leftFoot:'🦶',rightFoot:'🦶',leftHand:'🖐️',rightHand:'🖐️'};
+ let running=false,mode='time',difficulty='easy',moves=0,total=0,startAt=0,lastStep=0,timer=null,stepDelay=2400,ctx=null;
+ function updateMode(){const m=$('mode').value;$('amountField').style.display=m==='unlimited'?'none':'block';$('amountLabel').textContent=m==='time'?'TID':'ANTAL';$('amount').innerHTML=m==='time'?'<option value="30">30 sekunder</option><option value="60" selected>1 minut</option><option value="120">2 minuter</option>':'<option value="10">10 kombinationer</option><option value="20" selected>20 kombinationer</option><option value="40">40 kombinationer</option>'}
+ $('mode').addEventListener('change',updateMode);updateMode();
+ function beep(freq=520,duration=.08){if(!$('sound').checked)return;try{ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=freq;g.gain.setValueAtTime(.045,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+duration)}catch(e){}}
+ function shuffle(a){return a.sort(()=>Math.random()-.5)}
+ function countForStep(){if(difficulty==='easy')return moves<5?1:(Math.random()<.42?2:1);if(difficulty==='medium')return moves<4?1:(moves<10?1+Math.floor(Math.random()*2):1+Math.floor(Math.random()*3));return Math.min(4,1+Math.floor(Math.random()*Math.min(4,1+Math.floor(moves/5))))}
+ function availableLimbs(){if(difficulty==='easy')return ['leftFoot','rightFoot'];if(difficulty==='medium')return moves<5?['leftFoot','rightFoot']:limbs;return limbs}
+ function nextDelay(){const base=difficulty==='easy'?2600:difficulty==='medium'?2050:1550;const ramp=difficulty==='easy'?Math.min(700,moves*28):difficulty==='medium'?Math.min(800,moves*32):Math.min(650,moves*24);return Math.max(difficulty==='easy'?1500:difficulty==='medium'?900:600,base-ramp)}
+ function showNext(){
+   const n=countForStep(),chosen=shuffle([...availableLimbs()]).slice(0,n),colors=shuffle(['yellow','red','blue','green']).slice(0,n);
+   tiles.forEach(t=>{t.classList.remove('lit');t.querySelector('.symbols').innerHTML=''});
+   chosen.forEach((limb,i)=>{const tile=tiles.find(t=>t.dataset.color===colors[i]);const span=document.createElement('span');span.className='symbol'+(n>1?' pair':'');span.textContent=icons[limb];span.setAttribute('aria-label',limb);tile.querySelector('.symbols').appendChild(span);tile.classList.add('lit')});
+   moves++;$('movesStat').textContent=moves;stepDelay=nextDelay();$('speedStat').textContent=stepDelay>2100?'Lugn':stepDelay>1300?'Medel':'Snabbt';
+   if(moves===1||moves%3===0)beep(480+Math.min(400,moves*8),.07);
+   lastStep=Date.now();timer=setTimeout(showNext,stepDelay);
+ }
+ function updateProgress(){const elapsed=(Date.now()-startAt)/1000;if(mode==='time'){const left=Math.max(0,total-elapsed);$('mainStat').textContent=fmt(left);$('mainLabel').textContent='Tid kvar';const pct=Math.min(100,elapsed/total*100);$('progressFill').style.width=pct+'%';$('progressLabel').textContent=Math.floor(pct)+'%';if(left<=0)finish()}else if(mode==='set'){const pct=Math.min(100,moves/total*100);$('mainStat').textContent=moves+' / '+total;$('mainLabel').textContent='Kombinationer';$('progressFill').style.width=pct+'%';$('progressLabel').textContent=Math.floor(pct)+'%';if(moves>=total)finish()}else{$('mainStat').textContent=fmt(elapsed);$('mainLabel').textContent='Speltid';$('progressFill').style.width=((moves%100)/100*100)+'%';$('progressLabel').textContent=moves+' st'}}
+ function fmt(s){const n=Math.max(0,Math.ceil(s));return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')}
+ function finish(){if(!running)return;running=false;clearTimeout(timer);clearInterval(clock);tiles.forEach(t=>{t.classList.remove('lit');t.querySelector('.symbols').innerHTML=''});$('gamePanel').classList.remove('active');$('finishedPanel').classList.add('show');$('finishTitle').textContent='Snyggt jobbat!';$('finishText').textContent='Du fick '+moves+' kombinationer på '+fmt((Date.now()-startAt)/1000)+'.';beep(660,.15);setTimeout(()=>beep(880,.2),180)}
+ let clock=null;
+ function start(){if(running)return;difficulty=$('difficulty').value;mode=$('mode').value;total=Number($('amount').value);moves=0;running=true;startAt=Date.now();$('setupPanel').style.display='none';$('finishedPanel').classList.remove('show');$('gamePanel').classList.add('active');$('movesStat').textContent='0';$('progressFill').style.width='0%';$('progressLabel').textContent='0%';showNext();clock=setInterval(updateProgress,100)}
+ $('startBtn').addEventListener('click',start);$('againBtn').addEventListener('click',()=>{ $('setupPanel').style.display='block';$('finishedPanel').classList.remove('show');$('gamePanel').classList.remove('active');});
+})();
+</script>
+</body></html>
